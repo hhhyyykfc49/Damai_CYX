@@ -1,0 +1,62 @@
+package com.example.myapplication_damai
+
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+
+//@Composable
+//fun MainNav() {
+//    val navController = rememberNavController()
+//
+//    Scaffold(
+//        bottomBar = { BottomNavBar(navController) }
+//    ) { padding ->
+//        NavHost(
+//            navController = navController,
+//            startDestination = NavRoute.Home.route,
+//            modifier = Modifier.padding(padding)
+//        ) {
+//            composable(NavRoute.Home.route) { HomeScreen() }
+//            composable(NavRoute.Live.route) { LiveScreen() }
+//            composable(NavRoute.Vip.route) { VipScreen() }
+//            composable(NavRoute.Ticket.route) { TicketScreen() }
+//            composable(NavRoute.Mine.route) { MineScreen() }
+//        }
+//    }
+//}
+//@Preview(name = "主界面", showSystemUi = true, showBackground = true)
+//@Composable
+//fun MainNavPreview() {
+//    MainNav()
+//}
+
+
+@Composable
+fun MainNav() {
+    val navController = rememberNavController()
+
+
+        NavHost(
+            navController = navController,
+            startDestination = NavRoute.Home.route,
+//            modifier = Modifier.padding(top = 40.dp)
+        ) {
+            composable(NavRoute.Home.route) { HomeScreen() }
+            composable(NavRoute.Live.route) { LiveScreen() }
+            composable(NavRoute.Vip.route) { VipScreen() }
+            composable(NavRoute.Ticket.route) { TicketScreen() }
+            composable(NavRoute.Mine.route) { MineScreen() }
+
+    }
+}
+@Preview(name = "主界面", showSystemUi = true, showBackground = true)
+@Composable
+fun MainNavPreview() {
+    MainNav()
+}
