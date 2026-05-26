@@ -1,5 +1,8 @@
 package com.example.myapplication_damai
 
+import android.annotation.SuppressLint
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -37,24 +40,57 @@ import androidx.compose.ui.unit.dp
 //}
 
 
+
+//@Composable
+//fun MainNav() {
+//    val navController = rememberNavController()
+//
+//
+//
+//    NavHost(
+//            navController = navController,
+//            startDestination = NavRoute.Home.route,
+////            modifier = Modifier.padding(top = 40.dp)
+//        ) {
+//            composable(NavRoute.Home.route) { HomeScreen() }
+//            composable(NavRoute.Live.route) { LiveScreen() }
+//            composable(NavRoute.Vip.route) { VipScreen() }
+//            composable(NavRoute.Ticket.route) { TicketScreen() }
+//            composable(NavRoute.Mine.route) { MineScreen() }
+//
+//    }
+//}
+
+
+
+
 @Composable
 fun MainNav() {
     val navController = rememberNavController()
 
-
+    // 垂直布局：内容区 + 底部导航栏
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        // 1. 页面内容（占满大部分空间）
         NavHost(
             navController = navController,
             startDestination = NavRoute.Home.route,
-//            modifier = Modifier.padding(top = 40.dp)
+            modifier = Modifier.weight(1f) // 关键：让内容占满剩余空间
         ) {
             composable(NavRoute.Home.route) { HomeScreen() }
             composable(NavRoute.Live.route) { LiveScreen() }
             composable(NavRoute.Vip.route) { VipScreen() }
             composable(NavRoute.Ticket.route) { TicketScreen() }
             composable(NavRoute.Mine.route) { MineScreen() }
+        }
 
+        // 2. 底部导航栏
+        BottomNavBar(navController)
     }
 }
+
+
 @Preview(name = "主界面", showSystemUi = true, showBackground = true)
 @Composable
 fun MainNavPreview() {

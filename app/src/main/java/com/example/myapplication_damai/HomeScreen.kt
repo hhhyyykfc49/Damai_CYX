@@ -1,6 +1,8 @@
 package com.example.myapplication_damai
 
+import android.graphics.Paint
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -8,8 +10,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -17,9 +21,17 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ButtonDefaults.elevation
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -28,19 +40,27 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.accompanist.pager.PagerState
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 // 分类数据（不变）
 data class CategoryItem(
@@ -189,12 +209,109 @@ fun HomeScreen() {
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
         ) {
+            MyBookAppointModule()
             CategoryGrid()
             HotAreaModule()
+            FunctionCardModule()
+            BannerCarousel()
+            MustSeePerformanceModule()
         }
     }
 }
+@Composable
+fun MyBookAppointModule() {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 6.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        elevation = CardDefaults.cardElevation(0.dp)
+    ) {
+        Column(
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp) // 统一内边距
+        ) {
+            // 标题行
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Text(
+                        text = "我的抢票预约",
+                        fontSize = 18.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFFFF4081)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = "今日抢票 一键直达",
+                        fontSize = 14.sp,
+                        color = Color.Gray
+                    )
+                }
+            }
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            // 头像 + 右侧内容（关键改动在这里）
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.Top // 头像顶部对齐，更美观
+            ) {
+                // 头像
+                Image(
+                    painter = painterResource(id = R.drawable.dengziqi),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(48.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
+
+                Spacer(modifier = Modifier.width(12.dp))
+
+                // 右侧整个区域：用 Box 实现 文字+右下角图标
+                Box(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    // 文字内容（演出信息 + 票价）
+                    Column {
+                        Text(
+                            text = "【福州】G.E.M.邓紫棋 I AM GLORIA世界巡回演唱会2.0 -福州站",
+                            fontSize = 14.sp,
+                            color = Color.Black,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
+                        Spacer(modifier = Modifier.height(20.dp))
+                        Text(
+                            text = "¥460 × 1张",
+                            fontSize = 14.sp,
+                            color = Color.Gray
+                        )
+                    }
+
+                    // ==============================
+                    // 图标 放在右下角，不挤压、不同行
+                    // ==============================
+                    Image(
+                        painter = painterResource(id = R.drawable.ready_to_buy_ticket),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .align(Alignment.BottomEnd) // 右下角
+                            .height(20.dp) // 你可以随便调大小，不会变形
+                    )
+                }
+            }
+        }
+    }
+}
+
+
 
 // 分类模块（完全不变）
 @Composable
@@ -202,13 +319,13 @@ fun CategoryGrid() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.dp),
+            .padding(horizontal = 16.dp, vertical = 10.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(0.dp)
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 20.dp, horizontal = 8.dp)
+            modifier = Modifier.padding(vertical = 16.dp, horizontal = 0.dp)
         ) {
             Row(
                 modifier = Modifier.fillMaxWidth(),
@@ -218,7 +335,7 @@ fun CategoryGrid() {
                     CategoryItemView(categoryList[index])
                 }
             }
-            Spacer(modifier = Modifier.height(20.dp))
+            Spacer(modifier = Modifier.height(10.dp))
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceEvenly
@@ -235,7 +352,7 @@ fun CategoryGrid() {
 fun CategoryItemView(item: CategoryItem) {
     Column(
         modifier = Modifier
-            .width(60.dp)
+            .width(65.dp)
             .clickable { },
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -262,7 +379,7 @@ fun HotAreaModule(){
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp) //卡片中间间距
+        horizontalArrangement = Arrangement.spacedBy(10.dp) //卡片中间间距
         //============左侧：抢票播报站===============
 
     ) {
@@ -271,7 +388,7 @@ fun HotAreaModule(){
                 .weight(1f)   //左右平分宽度
                 .height(160.dp),
             shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF8F8)),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
                 elevation= CardDefaults.cardElevation(0.dp)
         ) {
             Column(
@@ -281,22 +398,32 @@ fun HotAreaModule(){
             ){
                 //标题行
                 Row(
-                    modifier = Modifier.fillMaxSize(),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     Text(
                         text = "抢票播报站",
-                        fontSize = 16.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
-                        color=Color(0xFF222222)
+                        color = Color(0xFF222222)
                     )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Box(
+                        modifier = Modifier
+                            .width(70.dp)
+                            .height(21.dp)
+                            .background(Color(0xFFfefefe), shape = RoundedCornerShape(8.dp)),
+                        contentAlignment = Alignment.Center
+
+                    ){
                     Text(
                         text = "张学友广州 >",
-                        fontSize = 12.sp,
-                        color=Color(0xFF999999)
-                    )
+                        fontSize = 11.sp,
+                        color = Color(0xFFf3a8c2)
 
+                    )
+                    }
+                }
                     Spacer(modifier = Modifier.height(10.dp))
 
                     //内容行:头像+演出名
@@ -304,7 +431,7 @@ fun HotAreaModule(){
                         verticalAlignment = Alignment.CenterVertically
                     ) {
                         Image(
-                            painterResource(R.drawable.ic_drama),
+                            painterResource(R.drawable.dengziqi),
                             contentDescription = null,
                             modifier = Modifier.size(40.dp).clip(CircleShape),
                             contentScale = ContentScale.Crop
@@ -313,7 +440,7 @@ fun HotAreaModule(){
                         Column()
                             {
                                 Text(
-                                    text = "G.E.M.邓紫棋 I AN GLORIA世界巡回演唱会...",
+                                    text = "G.E.M.邓紫棋 I AM GLORIA世界巡回演唱会...",
                                     fontSize = 12.sp,
                                     maxLines = 2,
                                     color=Color(0xFF333333)
@@ -321,7 +448,7 @@ fun HotAreaModule(){
                                 Text(
                                     text="39.9万人想看",
                                     fontSize = 11.sp,
-                                    color=Color(0xFF888888)
+                                    color=Color(0xFFec7097)
                                 )
                             }
                     }
@@ -336,16 +463,16 @@ fun HotAreaModule(){
                         contentAlignment = Alignment.Center
                     ){
                         Image(
-                            painter = painterResource(R.drawable.bubble),
+                            painter = painterResource(R.drawable.ic_buy),
                             contentDescription = null,
-                            modifier = Modifier.fillMaxSize(),
-                            contentScale = ContentScale.Crop // 图片铺满按钮区域
+                            modifier = Modifier.width(80.dp)
+                                .padding(start = 10.dp),
+                            contentScale = ContentScale.Fit // 图片铺满按钮区域
                         )
 
 
                     }
 
-                }
             }
         }
         //================右侧：天天低价=============
@@ -354,11 +481,334 @@ fun HotAreaModule(){
                 .weight(1f)
                 .height(160.dp),
             shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = Color(0xFFFFF8F8)),
+            colors = CardDefaults.cardColors(containerColor = Color.White),
             elevation= CardDefaults.cardElevation(0.dp)
         ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(12.dp)
+            ) {
+                Row(
+                  modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "天天低价",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color=Color(0xFF222222)
+                    )
+                    Box(
+                        modifier = Modifier
+                            .width(90.dp)
+                            .height(21.dp)
+                            .background(Color(0xFFfefefe), shape = RoundedCornerShape(8.dp)),
+                        contentAlignment = Alignment.Center
+
+                    ){
+                    Text(
+                        text = "领券购票更优惠 >",
+                        fontSize = 11.sp,
+                        color= Color(0xFF999999)
+                    )
+                    }
+                }
+                Spacer(modifier = Modifier.height(10.dp))
+
+                //两个商品横向排列
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween
+                ) {
+                    //左边商品
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Image(
+                            painter = painterResource(R.drawable.ic_livere),
+                            contentDescription =null,
+                            modifier = Modifier.size(60.dp).clip(RoundedCornerShape(6.dp)),
+                        contentScale = ContentScale.Crop
+                        )
+                        Box(
+                            modifier = Modifier
+                                .padding(top=4.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                    .background(Color(0xFFFF4D8F))
+                                .padding(horizontal = 6.dp, vertical = 2.dp)
+                        ){
+                            Text(text="¥99起", color = Color.White, fontSize = 11.sp)
+                        }
+
+                    }
+                    //右边商品
+                    Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                        Image(
+                            painter = painterResource(R.drawable.drama_lei_yu),
+                            contentDescription =null,
+                            modifier = Modifier.size(60.dp).clip(RoundedCornerShape(6.dp)),
+                            contentScale = ContentScale.Crop
+                        )
+                        Box(
+                            modifier = Modifier
+                                .padding(top=4.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .background(Color(0xFFFF4D8F))
+                                .padding(horizontal = 6.dp, vertical = 2.dp)
+                        ){
+                            Text(text="¥100起", color = Color.White, fontSize = 11.sp)
+                        }
+
+                    }
+                }
+            }
 
         }
+    }
+}
+
+@Composable
+fun FunctionCardModule() {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        // 演出日历
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .height(70.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(Color.White)
+                .padding(horizontal = 6.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column {
+                    Text(text = "演出日历", fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    Text(text = "按时间选演出", fontSize = 11.sp, color = Color.Gray)
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                Image(
+                    painter = painterResource(R.drawable.ic_time),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
+
+        // 大麦演出榜
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .height(70.dp)
+                .clip(RoundedCornerShape(10.dp))
+                .background(Color.White)
+                .padding(horizontal = 6.dp),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Column {
+                    Text(text = "大麦演出榜", fontSize = 14.sp, fontWeight = FontWeight.Bold)
+                    Text(text = "你的观演指南", fontSize = 11.sp, color = Color.Gray)
+                }
+                Spacer(modifier = Modifier.weight(1f))
+                Image(
+                    painter = painterResource(R.drawable.ic_top),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
+        }
+
+        // 大麦团购
+        Box(
+            modifier = Modifier
+                .weight(1f)
+                .height(70.dp) // 固定高度
+                .clip(RoundedCornerShape(10.dp))
+                .background(Color.White) // 背景还是白色
+                .padding(start = 6.dp, end = 0.dp)
+                .border(
+                    width = 2.dp,
+            color = Color.Red,
+            shape = RoundedCornerShape(10.dp) // 和背景一样的圆角
+        ),
+            contentAlignment = Alignment.CenterStart
+        ) {
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.fillMaxSize()
+            ) {
+                // 左侧文字
+                Column {
+                    Text(
+                        text = "大麦团购",
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold,
+                        color = Color(0xFFFF4081)
+                    )
+                    Text(
+                        text = "超低价随时退",
+                        fontSize = 11.sp,
+                        color = Color.Gray
+                    )
+                }
+
+                Spacer(modifier = Modifier.weight(1f)) // 把图片推到最右边
+
+                Image(
+                    painter = painterResource(id = R.drawable.ic_right_row), // 你的图片
+                    contentDescription = null,
+                    modifier = Modifier
+                        .height(90.dp),
+                    contentScale = ContentScale.Fit // 保持图片比例
+                )
+            }
+        }
+    }
+}
+
+
+val bannerList = listOf(
+    R.drawable.banner1,
+    R.drawable.banner2,
+    R.drawable.banner4
+)
+
+@Composable
+fun BannerCarousel() {
+
+    val pagerState = rememberPagerState(
+        pageCount = { bannerList.size }
+    )
+
+    // 自动轮播
+    LaunchedEffect(Unit) {
+        while (true) {
+            delay(3000)
+            val nextPage = (pagerState.currentPage + 1) % bannerList.size
+            pagerState.animateScrollToPage(nextPage)
+        }
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(80.dp)
+            .padding(horizontal = 16.dp) // 左右边距，更美观
+    ) {
+        // 官方原生轮播图
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .weight(1f)
+                .clip(RoundedCornerShape(12.dp))
+        ) { page ->
+            Image(
+                painter = painterResource(id = bannerList[page]),
+                contentDescription = "轮播图",
+                modifier = Modifier.fillMaxWidth(),
+                contentScale = ContentScale.Fit
+            )
+        }
+
+    }
+}
+
+
+data class MustSeeItem(
+    val imageRes:Int,
+    val desc: String
+)
+
+
+//单个演出卡片
+@Composable
+fun MustSeeItemCard(item: MustSeeItem)
+{
+
+    Column(
+        modifier = Modifier.width(100.dp)
+    ) {
+      Image(
+          painter=painterResource(item.imageRes),
+          contentDescription = null,
+          modifier = Modifier
+              .size((140.dp))
+              .clip(RoundedCornerShape(12.dp))
+      )
+        Spacer(modifier = Modifier.height(6.dp))
+
+        //描述
+        Text(
+            text = item.desc,
+            fontSize = 12.sp,
+            color= Color.Gray,
+            maxLines = 2
+        )
+    }
+
+}
+
+
+@Composable
+fun MustSeePerformanceModule(){
+
+    //存放演出数据
+    val MustSeeLIst=listOf(
+        MustSeeItem(
+            imageRes = R.drawable.lazy_row_banner1,
+            desc = "2026苏见信「尽兴而活」巡回演唱会﹣福州站"
+        ),
+        MustSeeItem(
+            imageRes = R.drawable.lazy_row_banner2,
+            desc = "杨千嬅 Live MY LIVE 1.0 世界巡回演唱会﹣厦门站"
+        ),
+        MustSeeItem(
+            imageRes = R.drawable.lazy_row_banner3,
+            desc = "春日海海2026鹿先森乐队工人体育馆演唱会"
+        ),
+        MustSeeItem(
+            imageRes = R.drawable.lazy_row_banner4,
+            desc = "致敬大师《天空 之城》《千与千寻》《龙猫 》宫崎骏&久石让经典动漫.."
+        ),
+        MustSeeItem(
+            imageRes = R.drawable.lazy_row_banner5,
+            desc = "7月23日婺剧《三打白骨精》"
+        ),
+        MustSeeItem(
+            imageRes = R.drawable.lazy_row_banner6,
+            desc = "Zkaaai-2026巡演Livehouse"
+        )
+    )
+
+
+    Column(
+        modifier = Modifier.fillMaxWidth()
+    ){
+        Text(
+            text = "必看演出",
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp)
+        )
+
+
+
+        //横向滑动列表
+        LazyRow(
+            modifier = Modifier.fillMaxWidth(),
+            contentPadding = PaddingValues(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            items(MustSeeLIst){  item ->
+                MustSeeItemCard(item)
+            }
+        }
+
     }
 }
 
