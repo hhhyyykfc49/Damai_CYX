@@ -3,6 +3,7 @@ package com.example.myapplication_damai
 import android.graphics.Paint
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -22,8 +23,12 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -81,145 +86,195 @@ val categoryList = listOf(
     CategoryItem(R.drawable.ic_all, "全部")
 )
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen() {
-    Scaffold(
-        topBar = {
-            // 🔥 三层渐变 + statusBarsPadding 顶吸完全保留
-            Box(
+    LazyColumn (
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        //第一层顶吸：渐变搜索栏（滑动到Tab处会被替换)
+        stickyHeader {
+            HomeGradientTopBar()
+        }
+
+
+        item {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-//                    .statusBarsPadding()
-                    .height(120.dp)
-//                    .padding(vertical = 10.dp)
-                    .background(
-                        //第一层：粉色横向渐变
-                        brush = Brush.linearGradient(
-                            colors = listOf(Color(0xFFFF94B4), Color(0xFFFF80A0)),
-                            start = Offset(0f, 0f), end = Offset(Float.POSITIVE_INFINITY, 0f)
-                        )
-                    )
-                    .background(
-                      //  第二层：白色半透明叠加
-                        brush = Brush.linearGradient(
-                            colors=listOf(Color(0x00FFFFFF), Color(0x99FFD4BC)),
-                            start =Offset(0f, 0f),end= Offset(Float.POSITIVE_INFINITY, 0f)
-                        )
-                    )
-                    .background(
-                     //   第三层：径向渐变
-                        brush = Brush.radialGradient(
-                            colors=listOf(Color(0x33FFD4BC),Color(0x00FFFFFF)),
-                            center = Offset(Float.POSITIVE_INFINITY, 0f), radius = 200f
-                        )
-                    )
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
+                MyBookAppointModule()
+                CategoryGrid()
+                HotAreaModule()
+                FunctionCardModule()
+                BannerCarousel()
+                MustSeePerformanceModule()
+            }
+        }
 
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 0.dp, end = 2.dp, top=44.dp),
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Box()
-                    {
-                        Row( modifier = Modifier
-                            .padding(start = 0.dp, end = 2.dp),
-                            verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                painter = painterResource(R.drawable.location),
-                                contentDescription = null,
-                                tint = Color.Unspecified,
-                                modifier = Modifier.size(24.dp)
-                                    .padding(end=4.dp)
-                            )
-                            Text(
-                                text = "福州",
-                                color = Color.White,
-                                fontSize = 16.sp,
-                                modifier = Modifier.padding(end = 8.dp)
-                            )
-                        }
-                    }
+        //第二层顶吸：横向滑动Tab导航栏（替换原来的搜索栏）
+        stickyHeader {
+            HomeTabNavigation()
+        }
+    item {
+        PerformanceWaterFallList()
+    }
 
-                    Box(
+
+    }
+}
+
+
+@Composable
+fun HomeGradientTopBar()
+{
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+//                    .statusBarsPadding()
+            .height(120.dp)
+//                    .padding(vertical = 10.dp)
+            .background(
+                //第一层：粉色横向渐变
+                brush = Brush.linearGradient(
+                    colors = listOf(Color(0xFFFF94B4), Color(0xFFFF80A0)),
+                    start = Offset(0f, 0f), end = Offset(Float.POSITIVE_INFINITY, 0f)
+                )
+            )
+            .background(
+                //  第二层：白色半透明叠加
+                brush = Brush.linearGradient(
+                    colors=listOf(Color(0x00FFFFFF), Color(0x99FFD4BC)),
+                    start =Offset(0f, 0f),end= Offset(Float.POSITIVE_INFINITY, 0f)
+                )
+            )
+            .background(
+                //   第三层：径向渐变
+                brush = Brush.radialGradient(
+                    colors=listOf(Color(0x33FFD4BC),Color(0x00FFFFFF)),
+                    center = Offset(Float.POSITIVE_INFINITY, 0f), radius = 200f
+                )
+            )
+    ) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 0.dp, end = 2.dp, top=44.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Box()
+            {
+                Row( modifier = Modifier
+                    .padding(start = 0.dp, end = 2.dp),
+                    verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        painter = painterResource(R.drawable.location),
+                        contentDescription = null,
+                        tint = Color.Unspecified,
+                        modifier = Modifier.size(24.dp)
+                            .padding(end=4.dp)
+                    )
+                    Text(
+                        text = "福州",
+                        color = Color.White,
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(end = 8.dp)
+                    )
+                }
+            }
+
+            Box(
+                modifier = Modifier
+                    .weight(1f)
+                    .height(44.dp)
+                    .background(Color.White, RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp, bottomEnd = 22.dp, bottomStart = 4.dp))
+                    .padding(horizontal = 12.dp)
+                    .clickable { },
+                contentAlignment = Alignment.CenterStart
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        painter = painterResource(R.drawable.search_box),
+                        contentDescription = null,
+                        tint = Color.Unspecified,
+                        modifier = Modifier.size(20.dp)
+                    )
+                    Text(
+                        text = "|",
+                        color=Color(0xFFe9a7c8),
+                        fontSize = 30.sp,
+                        modifier = Modifier.padding(start = 6.dp)
+                    )
+                    Text(
+                        text = "龙梅子",
+                        color = Color.Gray,
+                        fontSize = 18.sp,
                         modifier = Modifier
                             .weight(1f)
-                            .height(44.dp)
-                            .background(Color.White, RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp, bottomEnd = 22.dp, bottomStart = 4.dp))
-                            .padding(horizontal = 12.dp)
-                            .clickable { },
-                        contentAlignment = Alignment.CenterStart
-                    ) {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(
-                                painter = painterResource(R.drawable.search_box),
-                                contentDescription = null,
-                                tint = Color.Unspecified,
-                                modifier = Modifier.size(20.dp)
-                            )
-                            Text(
-                                text = "|",
-                                color=Color(0xFFe9a7c8),
-                                fontSize = 30.sp,
-                                modifier = Modifier.padding(start = 6.dp)
-                            )
-                            Text(
-                                text = "龙梅子",
-                                color = Color.Gray,
-                                fontSize = 18.sp,
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .padding(start = 6.dp)
-                            )
-                            Button(
-                                onClick = {},
-                                modifier = Modifier
-                                    .padding(end = 0.dp)
-                                    .height(40.dp),
-                                shape = RoundedCornerShape(20.dp),
-                                colors = ButtonDefaults.buttonColors(
-                                    containerColor = Color(0xFFed88ba)
-                                )
-                            ) {
-                                Text("搜索", color = Color.White)
-                            }
-                        }
-                    }
-
-                    Box(
+                            .padding(start = 6.dp)
+                    )
+                    Button(
+                        onClick = {},
                         modifier = Modifier
-                            .padding(start = 8.dp)
-                            .size(36.dp)
-                            .clickable {},
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.bubble),
-                            contentDescription = null,
-                            tint = Color.Unspecified,
-                            modifier = Modifier.size(20.dp)
+                            .padding(end = 0.dp)
+                            .height(40.dp),
+                        shape = RoundedCornerShape(20.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color(0xFFed88ba)
                         )
+                    ) {
+                        Text("搜索", color = Color.White)
                     }
                 }
             }
+
+            Box(
+                modifier = Modifier
+                    .padding(start = 8.dp)
+                    .size(36.dp)
+                    .clickable {},
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.bubble),
+                    contentDescription = null,
+                    tint = Color.Unspecified,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
         }
-    ) { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-                .verticalScroll(rememberScrollState())
-        ) {
-            MyBookAppointModule()
-            CategoryGrid()
-            HotAreaModule()
-            FunctionCardModule()
-            BannerCarousel()
-            MustSeePerformanceModule()
+    }
+
+
+}
+//   ------------横向Tab导航---------------
+@Composable
+fun HomeTabNavigation()
+{
+    val tablist=listOf("推荐","演唱会","音乐节","话剧","脱口秀","展览","亲子")
+
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(Color.White)
+            .padding(vertical = 12.dp, horizontal = 16.dp),
+        horizontalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
+        tablist.forEach { title->
+            Text(
+                text=title,
+                fontSize = 16.sp,
+                color = if(title=="推荐")Color(0xFFFF5722) else Color.Gray
+            )
+
         }
     }
 }
+
+
 @Composable
 fun MyBookAppointModule() {
     Card(
@@ -809,6 +864,104 @@ fun MustSeePerformanceModule(){
             }
         }
 
+    }
+}
+
+//瀑布流模块
+// =====================演出数据实体====================
+data class PerformanceInfo(
+    val imgRes:Int,
+    val title:String,
+    val desc:String,
+    val price:String,
+    val cardHeight:Int
+)
+
+
+// ===================== 瀑布流单个条目布局 =====================
+@Composable
+fun PerformanceWaterfallItem(item: PerformanceInfo) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.White)
+    ) {
+        // 演出图片，高度不同形成错落瀑布流
+        Image(
+            painter = painterResource(item.imgRes),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(item.cardHeight.dp),
+            contentScale = ContentScale.Crop
+        )
+        Column(
+            modifier = Modifier.padding(10.dp)
+        ) {
+            Text(
+                text = item.title,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.Bold,
+                maxLines = 2
+            )
+            Text(
+                text = item.desc,
+                fontSize = 12.sp,
+                color = Color.Gray,
+                modifier = Modifier.padding(top = 4.dp)
+            )
+            Text(
+                text = item.price,
+                fontSize = 13.sp,
+                color = Color(0xFFFF4081),
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(top = 6.dp)
+            )
+        }
+    }
+}
+//==========瀑布流主流表====================
+@Composable
+fun PerformanceWaterFallList(){
+    val PerformanceList=listOf(
+        PerformanceInfo(
+            imgRes = R.drawable.water_1,
+            title = "咸阳．萧敬腾2026 野生\n" +
+                    "巡回演唱会﹣﹣咸阳站",
+            desc = "明天15.38开抢",
+            price = "¥180起",
+            cardHeight = 180
+        ),
+        PerformanceInfo(
+            imgRes =R.drawable.water_2,
+            title = "金华． 【HI,LIVE】《我们的爱》艺灵音乐．遇见live流行经典金曲演唱会﹣义乌站",
+            desc = "7月18日开演",
+            price = "¥88起",
+            cardHeight = 220
+        ),
+        PerformanceInfo(
+            imgRes = R.drawable.water_3,
+            title = "南昌．G.E.M．邓紫棋I AM GLORIA世界巡回演唱会2.0﹣南昌站",
+            desc = "8月8日开演",
+            price = "380起",
+            cardHeight = 190
+        )
+    )
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(2),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 12.dp),
+        //列之间的距离
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        //行之间的距离
+        verticalItemSpacing =12.dp
+    ) {
+        items(PerformanceList){item ->
+            PerformanceWaterfallItem(item)
+
+        }
     }
 }
 
