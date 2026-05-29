@@ -927,8 +927,7 @@ fun PerformanceWaterFallList(){
     val PerformanceList=listOf(
         PerformanceInfo(
             imgRes = R.drawable.water_1,
-            title = "咸阳．萧敬腾2026 野生\n" +
-                    "巡回演唱会﹣﹣咸阳站",
+            title = "咸阳．萧敬腾2026 野生 巡回演唱会﹣﹣咸阳站",
             desc = "明天15.38开抢",
             price = "¥180起",
             cardHeight = 180
@@ -948,19 +947,25 @@ fun PerformanceWaterFallList(){
             cardHeight = 190
         )
     )
-    LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Fixed(2),
+    Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 12.dp),
-        //列之间的距离
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        //行之间的距离
-        verticalItemSpacing =12.dp
-    ) {
-        items(PerformanceList){item ->
-            PerformanceWaterfallItem(item)
+            .height(800.dp)
+    ){
+        LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Fixed(2),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp),
+            //列之间的距离
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            //行之间的距离
+            verticalItemSpacing =12.dp
+        ) {
+            items(PerformanceList){item ->
+                PerformanceWaterfallItem(item)
 
+            }
         }
     }
 }
