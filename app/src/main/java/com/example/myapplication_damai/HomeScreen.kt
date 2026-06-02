@@ -55,6 +55,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -102,7 +103,7 @@ fun HomeScreen() {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(12.dp),
+                    .padding(2.dp),
                 verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 MyBookAppointModule()
@@ -280,13 +281,13 @@ fun MyBookAppointModule() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 6.dp),
+            .padding(horizontal = 16.dp, vertical = 3.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(0.dp)
     ) {
         Column(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp) // 统一内边距
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp) // 统一内边距
         ) {
             // 标题行
             Row(
@@ -322,12 +323,12 @@ fun MyBookAppointModule() {
                     painter = painterResource(id = R.drawable.dengziqi),
                     contentDescription = null,
                     modifier = Modifier
-                        .size(48.dp)
+                        .size(58.dp)
                         .clip(CircleShape),
                     contentScale = ContentScale.Crop
                 )
 
-                Spacer(modifier = Modifier.width(12.dp))
+//                Spacer(modifier = Modifier.width(4.dp))
 
                 // 右侧整个区域：用 Box 实现 文字+右下角图标
                 Box(
@@ -342,11 +343,18 @@ fun MyBookAppointModule() {
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
-                        Spacer(modifier = Modifier.height(20.dp))
                         Text(
-                            text = "¥460 × 1张",
+                            text = "   福州站",
                             fontSize = 14.sp,
-                            color = Color.Gray
+
+                        )
+
+                        Spacer(modifier = Modifier.height(6.dp))
+                        Text(
+                            text = "   ¥460 × 1张",
+                            fontSize = 15.sp,
+                            color = Color.Black,
+                            fontWeight = FontWeight.Bold
                         )
                     }
 
@@ -374,7 +382,7 @@ fun CategoryGrid() {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 10.dp),
+            .padding(horizontal = 16.dp, vertical = 6.dp),
         shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         elevation = CardDefaults.cardElevation(0.dp)
@@ -430,6 +438,19 @@ fun CategoryItemView(item: CategoryItem) {
 //抢票播报站+天天低价
 @Composable
 fun HotAreaModule(){
+
+    val Brush1 = Brush.linearGradient(
+        colors = listOf(Color(0xFFF44336),Color.White),
+        start = Offset(0f,-5000f),
+        end = Offset(0f,Float.POSITIVE_INFINITY)
+    )
+
+    val Brush2=Brush.linearGradient(
+        colors=listOf(Color(0xFFFFC107), Color.White),
+        start = Offset(0f,-4000f),
+        end = Offset(0f, Float.POSITIVE_INFINITY)
+    )
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -441,15 +462,19 @@ fun HotAreaModule(){
         Card(
             modifier = Modifier
                 .weight(1f)   //左右平分宽度
-                .height(160.dp),
+                .height(134.dp)
+                .background(brush = Brush1,shape = RoundedCornerShape(12.dp))
+            ,
             shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
-                elevation= CardDefaults.cardElevation(0.dp)
+            colors = CardDefaults.cardColors(
+                //containerColor = Color.White
+            containerColor = Color.Transparent
+            )
         ) {
             Column(
                 modifier= Modifier
                     .fillMaxSize()
-                    .padding(12.dp)
+                    .padding(10.dp)
             ){
                 //标题行
                 Row(
@@ -462,18 +487,18 @@ fun HotAreaModule(){
                         fontWeight = FontWeight.Bold,
                         color = Color(0xFF222222)
                     )
-                    Spacer(modifier = Modifier.width(12.dp))
+                    Spacer(modifier = Modifier.width(16.dp))
                     Box(
                         modifier = Modifier
-                            .width(70.dp)
+                            .width(60.dp)
                             .height(21.dp)
                             .background(Color(0xFFfefefe), shape = RoundedCornerShape(8.dp)),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.CenterEnd
 
                     ){
                     Text(
                         text = "张学友广州 >",
-                        fontSize = 11.sp,
+                        fontSize = 9.sp,
                         color = Color(0xFFf3a8c2)
 
                     )
@@ -488,23 +513,34 @@ fun HotAreaModule(){
                         Image(
                             painterResource(R.drawable.dengziqi),
                             contentDescription = null,
-                            modifier = Modifier.size(40.dp).clip(CircleShape),
+                            modifier = Modifier.size(45.dp).clip(CircleShape),
                             contentScale = ContentScale.Crop
                         )
-                        Spacer(modifier = Modifier.width(8.dp))
+                        Spacer(modifier = Modifier.width(4.dp))
                         Column()
                             {
                                 Text(
                                     text = "G.E.M.邓紫棋 I AM GLORIA世界巡回演唱会...",
-                                    fontSize = 12.sp,
+                                    fontSize = 11.sp,
                                     maxLines = 2,
                                     color=Color(0xFF333333)
                                 )
-                                Text(
-                                    text="39.9万人想看",
-                                    fontSize = 11.sp,
-                                    color=Color(0xFFec7097)
-                                )
+
+                                Spacer(Modifier.height(4.dp))
+                                Row(
+
+                                ) {
+                                    Text(
+                                        text="39.9",
+                                        fontSize = 11.sp,
+                                        color=Color(0xFFec7097)
+                                    )
+                                    Text(
+                                        text = "万人想看",
+                                        fontSize = 9.sp,
+
+                                    )
+                                }
                             }
                     }
 
@@ -514,13 +550,17 @@ fun HotAreaModule(){
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .height(28.dp),
-                        contentAlignment = Alignment.Center
+                            .height(24.dp),
+//                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.CenterEnd
                     ){
+//
+
+
                         Image(
                             painter = painterResource(R.drawable.ic_buy),
                             contentDescription = null,
-                            modifier = Modifier.width(80.dp)
+                            modifier = Modifier.width(95.dp)
                                 .padding(start = 10.dp),
                             contentScale = ContentScale.Fit // 图片铺满按钮区域
                         )
@@ -534,15 +574,19 @@ fun HotAreaModule(){
         Card(
             modifier = Modifier
                 .weight(1f)
-                .height(160.dp),
+                .height(134.dp)
+                .background(brush = Brush2, shape = RoundedCornerShape(12.dp)),
             shape = RoundedCornerShape(12.dp),
-            colors = CardDefaults.cardColors(containerColor = Color.White),
+            colors = CardDefaults.cardColors(
+//                containerColor = Color.White
+                Color.Transparent
+               ),
             elevation= CardDefaults.cardElevation(0.dp)
         ) {
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(12.dp)
+                    .padding(10.dp)
             ) {
                 Row(
                   modifier = Modifier.fillMaxWidth(),
@@ -551,21 +595,21 @@ fun HotAreaModule(){
                 ) {
                     Text(
                         text = "天天低价",
-                        fontSize = 14.sp,
+                        fontSize = 15.sp,
                         fontWeight = FontWeight.Bold,
                         color=Color(0xFF222222)
                     )
                     Box(
                         modifier = Modifier
-                            .width(90.dp)
+                            .width(70.dp)
                             .height(21.dp)
                             .background(Color(0xFFfefefe), shape = RoundedCornerShape(8.dp)),
-                        contentAlignment = Alignment.Center
+                        contentAlignment = Alignment.CenterEnd
 
                     ){
                     Text(
                         text = "领券购票更优惠 >",
-                        fontSize = 11.sp,
+                        fontSize = 9.sp,
                         color= Color(0xFF999999)
                     )
                     }
@@ -587,7 +631,7 @@ fun HotAreaModule(){
                         )
                         Box(
                             modifier = Modifier
-                                .padding(top=4.dp)
+                                .padding(top=0.dp)
                                 .clip(RoundedCornerShape(8.dp))
                                     .background(Color(0xFFFF4D8F))
                                 .padding(horizontal = 6.dp, vertical = 2.dp)
@@ -606,7 +650,7 @@ fun HotAreaModule(){
                         )
                         Box(
                             modifier = Modifier
-                                .padding(top=4.dp)
+                                .padding(top=0.dp)
                                 .clip(RoundedCornerShape(8.dp))
                                 .background(Color(0xFFFF4D8F))
                                 .padding(horizontal = 6.dp, vertical = 2.dp)
@@ -627,7 +671,7 @@ fun FunctionCardModule() {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(horizontal = 16.dp, vertical = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         // 演出日历
@@ -685,18 +729,19 @@ fun FunctionCardModule() {
                 .height(70.dp) // 固定高度
                 .clip(RoundedCornerShape(10.dp))
                 .background(Color.White) // 背景还是白色
-                .padding(start = 6.dp, end = 0.dp)
-                .border(
-                    width = 2.dp,
-            color = Color.Red,
-            shape = RoundedCornerShape(10.dp) // 和背景一样的圆角
-        ),
+                .padding(start = 6.dp, end = 0.dp),
+//                .border(
+//                    width = 2.dp,
+//            color = Color(0xFFea75a9),
+//            shape = RoundedCornerShape(10.dp) // 和背景一样的圆角
+//        ),
             contentAlignment = Alignment.CenterStart
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxSize()
             ) {
+                Spacer(Modifier.width(20.dp))
                 // 左侧文字
                 Column {
                     Text(
@@ -712,15 +757,8 @@ fun FunctionCardModule() {
                     )
                 }
 
-                Spacer(modifier = Modifier.weight(1f)) // 把图片推到最右边
 
-                Image(
-                    painter = painterResource(id = R.drawable.ic_right_row), // 你的图片
-                    contentDescription = null,
-                    modifier = Modifier
-                        .height(90.dp),
-                    contentScale = ContentScale.Fit // 保持图片比例
-                )
+
             }
         }
     }

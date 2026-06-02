@@ -4,14 +4,15 @@ package com.example.myapplication_damai
 
 sealed class NavRoute(
     val route: String,
-    val iconRes: Int,
-    val title: String
+    val title: String,
+    val iconNormal: Int,
+    val iconSelect: Int
 ) {
-    object Home: NavRoute("home", iconRes = R.drawable.ic_home, title = "首页")
-    object Live: NavRoute("live", iconRes = R.drawable.ic_live, title = "现场")
-    object Vip: NavRoute("vip", iconRes = R.drawable.ic_search, title = "VIP")
-    object Ticket: NavRoute("ticket", iconRes = R.drawable.ic_shoppingcard, title = "票夹")
-    object Mine: NavRoute("mine", iconRes = R.drawable.ic_mine, title = "我的")
+    object Home: NavRoute("home", "首页", R.drawable.ic_home, R.drawable.ic_home_sel)
+    object Live: NavRoute("live", "演出", R.drawable.ic_live, R.drawable.ic_live_sel)
+    object Vip: NavRoute("vip", "会员", R.drawable.ic_search, R.drawable.ic_vip_sel)
+    object Ticket: NavRoute("ticket", "票务", R.drawable.ic_shoppingcard, R.drawable.ic_ticket_sel)
+    object Mine: NavRoute("mine", "我的", R.drawable.ic_mine, R.drawable.ic_mine_sel)
 }
 
 
