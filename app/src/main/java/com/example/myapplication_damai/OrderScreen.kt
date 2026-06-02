@@ -1,4 +1,4 @@
-package com.example.myapplication_damai.ui.theme
+package com.example.myapplication_damai
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
@@ -43,14 +43,14 @@ fun OrderScreen(navController: NavController) {
         TopAppBar(title = { Text("我的订单", fontSize = 20.sp) },
             navigationIcon = {
                 IconButton (onClick = {navController.popBackStack()}){
-                Icon(painterResource(R.drawable.left_arrow),
-                    contentDescription = null,
-                    modifier = Modifier.size(24.dp))
+                    Icon(painterResource(R.drawable.left_arrow),
+                        contentDescription = null,
+                        modifier = Modifier.size(24.dp))
                 }
             }
 
 
-            )
+        )
     }) { padding ->
         Column(
             modifier = Modifier
@@ -76,7 +76,7 @@ fun OrderScreen(navController: NavController) {
                         selected = index == pageState.currentPage,
                         onClick = {
                             scope.launch {
-                               pageState .animateScrollToPage(index)
+                                pageState .animateScrollToPage(index)
                             }
                         }
                     ) {
