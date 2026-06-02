@@ -12,7 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.myapplication_damai.ui.theme.OrderScreen
+import com.example.myapplication_damai.OrderScreen
 
 //@Composable
 //fun MainNav() {
