@@ -103,7 +103,7 @@ fun HomeScreen() {
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(12.dp),
-                verticalArrangement = Arrangement.spacedBy(12.dp)
+                verticalArrangement = Arrangement.spacedBy(2.dp)
             ) {
                 MyBookAppointModule()
                 CategoryGrid()
@@ -930,21 +930,21 @@ fun PerformanceWaterFallList(){
             title = "咸阳．萧敬腾2026 野生 巡回演唱会﹣﹣咸阳站",
             desc = "明天15.38开抢",
             price = "¥180起",
-            cardHeight = 180
+            cardHeight = 220
         ),
         PerformanceInfo(
             imgRes =R.drawable.water_2,
             title = "金华． 【HI,LIVE】《我们的爱》艺灵音乐．遇见live流行经典金曲演唱会﹣义乌站",
             desc = "7月18日开演",
             price = "¥88起",
-            cardHeight = 220
+            cardHeight = 260
         ),
         PerformanceInfo(
             imgRes = R.drawable.water_3,
             title = "南昌．G.E.M．邓紫棋I AM GLORIA世界巡回演唱会2.0﹣南昌站",
             desc = "8月8日开演",
             price = "380起",
-            cardHeight = 190
+            cardHeight =230
         )
     )
     Box(

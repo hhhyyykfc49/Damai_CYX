@@ -12,6 +12,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.example.myapplication_damai.ui.theme.OrderScreen
 
 //@Composable
 //fun MainNav() {
@@ -82,7 +83,8 @@ fun MainNav() {
             composable(NavRoute.Live.route) { LiveScreen() }
             composable(NavRoute.Vip.route) { VipScreen() }
             composable(NavRoute.Ticket.route) { TicketScreen() }
-            composable(NavRoute.Mine.route) { MineScreen() }
+            composable(NavRoute.Mine.route) { MineScreen(navController=navController)}
+            composable("order"){ OrderScreen(navController) }
         }
 
         // 2. 底部导航栏

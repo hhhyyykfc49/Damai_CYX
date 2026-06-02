@@ -13,7 +13,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.myapplication_damai"
-        minSdk = 24
+        minSdk = 25
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
@@ -60,6 +60,7 @@ dependencies {
 
     // Coil 图片加载
     implementation(libs.coil.compose)
+    implementation(libs.compose.material3)
 
     // 测试相关
     testImplementation(libs.junit)
