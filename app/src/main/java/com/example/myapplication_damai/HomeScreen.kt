@@ -62,6 +62,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.PagerState
@@ -89,13 +91,15 @@ val categoryList = listOf(
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    navController: NavController
+) {
     LazyColumn (
         modifier = Modifier.fillMaxWidth()
     ) {
         //第一层顶吸：渐变搜索栏（滑动到Tab处会被替换)
         stickyHeader {
-            HomeGradientTopBar()
+            HomeGradientTopBar(navController)
         }
 
 
@@ -129,7 +133,7 @@ fun HomeScreen() {
 
 
 @Composable
-fun HomeGradientTopBar()
+fun HomeGradientTopBar(navController: NavController)
 {
     Box(
         modifier = Modifier
@@ -193,7 +197,7 @@ fun HomeGradientTopBar()
                     .height(44.dp)
                     .background(Color.White, RoundedCornerShape(topStart = 22.dp, topEnd = 22.dp, bottomEnd = 22.dp, bottomStart = 4.dp))
                     .padding(horizontal = 12.dp)
-                    .clickable { },
+                    .clickable {navController.navigate("search") },
                 contentAlignment = Alignment.CenterStart
             ) {
                 Row(verticalAlignment = Alignment.CenterVertically) {
@@ -1012,5 +1016,5 @@ fun PerformanceWaterFallList(){
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun HomeScreenPreview() {
-    HomeScreen()
+    HomeScreen(navController = rememberNavController())
 }

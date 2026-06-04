@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -13,6 +14,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.myapplication_damai.OrderScreen
+import androidx.navigation.compose.currentBackStackEntryAsState
 
 //@Composable
 //fun MainNav() {
@@ -69,6 +71,16 @@ import com.example.myapplication_damai.OrderScreen
 fun MainNav() {
     val navController = rememberNavController()
 
+    val currentBackStackEntry by navController.currentBackStackEntryAsState()
+
+    val currentRoute =
+        currentBackStackEntry?.destination?.route
+
+    val hideBottomBarRoute=listOf(
+        "search",
+        "order"
+    )
+
     // 垂直布局：内容区 + 底部导航栏
     Column(
         modifier = Modifier.fillMaxSize()
@@ -79,16 +91,20 @@ fun MainNav() {
             startDestination = NavRoute.Home.route,
             modifier = Modifier.weight(1f) // 关键：让内容占满剩余空间
         ) {
-            composable(NavRoute.Home.route) { HomeScreen() }
+            composable(NavRoute.Home.route) { HomeScreen(navController) }
             composable(NavRoute.Live.route) { LiveScreen() }
             composable(NavRoute.Vip.route) { VipScreen() }
             composable(NavRoute.Ticket.route) { TicketScreen() }
             composable(NavRoute.Mine.route) { MineScreen(navController=navController)}
             composable("order"){ OrderScreen(navController) }
+            composable("search"){SearchScreen(navController)}
         }
 
-        // 2. 底部导航栏
-        BottomNavBar(navController)
+        if (currentRoute !in hideBottomBarRoute) {
+            BottomNavBar(navController)
+        }
+//        // 2. 底部导航栏
+//        BottomNavBar(navController)
     }
 }
 

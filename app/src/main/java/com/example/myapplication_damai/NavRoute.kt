@@ -13,6 +13,8 @@ sealed class NavRoute(
     object Vip: NavRoute("vip", "会员", R.drawable.ic_search, R.drawable.ic_vip_sel)
     object Ticket: NavRoute("ticket", "票务", R.drawable.ic_shoppingcard, R.drawable.ic_ticket_sel)
     object Mine: NavRoute("mine", "我的", R.drawable.ic_mine, R.drawable.ic_mine_sel)
+
+    object  Search : NavRoute("search","搜索",R.drawable.search_box,R.drawable.search_box)
 }
 
 
