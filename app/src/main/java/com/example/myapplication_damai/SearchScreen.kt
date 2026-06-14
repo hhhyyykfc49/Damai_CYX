@@ -1,5 +1,6 @@
 package com.example.myapplication_damai
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -16,6 +17,7 @@ import com.example.myapplication_damai.data.local.DatabaseProvider
 import com.example.myapplication_damai.data.local.SearchHistoryEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -99,9 +101,12 @@ fun SearchScreen(
                                                 keyword = keyword
                                             )
                                         )
+
                                     }
 
                                 }
+                                navController.navigate(
+                                    "search_result/$keyword")
                             }
                         }
                     ) {
@@ -114,12 +119,36 @@ fun SearchScreen(
         Spacer(
             modifier = Modifier.height(12.dp)
         )
+//
+//        Text(
+//            text = "搜索历史",
+//            style = MaterialTheme.typography.titleMedium,
+//            modifier = Modifier.padding(horizontal = 16.dp)
+//        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
 
-        Text(
-            text = "搜索历史",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.padding(horizontal = 16.dp)
-        )
+            Text(
+                text = "搜索历史",
+                style = MaterialTheme.typography.titleMedium
+            )
+
+            TextButton(
+                onClick = {
+
+                    scope.launch(Dispatchers.IO) {
+                        dao.clearAll()
+                    }
+
+                }
+            ) {
+                Text("清空")
+            }
+        }
 
         Spacer(
             modifier = Modifier.height(8.dp)
@@ -130,6 +159,9 @@ fun SearchScreen(
             items(historyList) { item ->
 
                 ListItem(
+                   modifier = Modifier.clickable{
+                       keyword=item.keyword
+                   },
                     headlineContent = {
                         Text(item.keyword)
                     }

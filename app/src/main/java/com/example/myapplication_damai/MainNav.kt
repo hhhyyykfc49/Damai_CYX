@@ -78,7 +78,8 @@ fun MainNav() {
 
     val hideBottomBarRoute=listOf(
         "search",
-        "order"
+        "order",
+        "search_result/{keyword}"
     )
 
     // 垂直布局：内容区 + 底部导航栏
@@ -98,6 +99,19 @@ fun MainNav() {
             composable(NavRoute.Mine.route) { MineScreen(navController=navController)}
             composable("order"){ OrderScreen(navController) }
             composable("search"){SearchScreen(navController)}
+            composable(
+                route = "search_result/{keyword}"
+            ) {
+
+                val keyword =
+                    it.arguments
+                        ?.getString("keyword")
+                        ?: ""
+
+                SearchResultScreen(
+                    keyword = keyword
+                )
+            }
         }
 
         if (currentRoute !in hideBottomBarRoute) {
