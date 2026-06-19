@@ -115,7 +115,7 @@ fun HomeScreen(
                 HotAreaModule()
                 FunctionCardModule()
                 BannerCarousel()
-                MustSeePerformanceModule()
+                MustSeePerformanceModule(navController)
             }
         }
 
@@ -824,11 +824,14 @@ data class MustSeeItem(
 
 //单个演出卡片
 @Composable
-fun MustSeeItemCard(item: MustSeeItem)
+fun MustSeeItemCard(item: MustSeeItem,onclick:()-> Unit)
 {
 
     Column(
         modifier = Modifier.width(100.dp)
+            .clickable{
+                onclick
+            }
     ) {
       Image(
           painter=painterResource(item.imageRes),
@@ -852,7 +855,7 @@ fun MustSeeItemCard(item: MustSeeItem)
 
 
 @Composable
-fun MustSeePerformanceModule(){
+fun MustSeePerformanceModule(navController: NavController){
 
     //存放演出数据
     val MustSeeLIst=listOf(
@@ -902,7 +905,13 @@ fun MustSeePerformanceModule(){
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
             items(MustSeeLIst){  item ->
-                MustSeeItemCard(item)
+                MustSeeItemCard(
+                    item=item,
+                    onclick = {
+                        if(item.desc.contains("苏见信")){
+                            navController.navigate("detail")
+                        }
+                    })
             }
         }
 

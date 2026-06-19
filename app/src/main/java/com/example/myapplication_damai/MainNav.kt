@@ -112,6 +112,12 @@ fun MainNav() {
                     keyword = keyword
                 )
             }
+            composable("detail"){
+                DetailScreen(
+                    navController
+                )
+            }
+
         }
 
         if (currentRoute !in hideBottomBarRoute) {
