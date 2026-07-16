@@ -908,7 +908,7 @@ fun MustSeePerformanceModule(navController: NavController){
                 MustSeeItemCard(
                     item=item,
                     onclick = {
-                        if(item.desc.contains("苏见信")){
+                        if(item.desc.contains("2026苏见信「尽兴而活」巡回演唱会﹣福州站")){
                             navController.navigate("detail")
                         }
                     })

@@ -1,4 +1,6 @@
 package com.example.myapplication_damai
+import android.graphics.drawable.Drawable
+import android.media.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,34 +43,102 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material3.*
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
+
+
+//@Composable
+//fun DetailScreen(
+//    navController: NavController
+//) {
+//
+//    Column(
+//        modifier = Modifier.fillMaxSize()
+//    ) {
+//
+//       Box(
+//           modifier = Modifier.fillMaxSize()
+//       ){
+//           Column(
+//               modifier = Modifier.fillMaxSize()
+//           ) {
+//               TopGradientArea(
+//                   navController = navController
+//               )
+//               Spacer(modifier = Modifier.height(16.dp))
+//
+//               ConcertInfoCard()
+//
+//               SessionModule()
+//
+//               EventInfoModule()
+//
+//               NoticeModule()
+//
+//               TicketStrategyModule()
+//
+//
+//           }
+//           DetailBottomBar()
+//       }
+//
+//    }
+//}
 @Composable
 fun DetailScreen(
     navController: NavController
 ) {
 
-    Column(
+    Box(
         modifier = Modifier.fillMaxSize()
     ) {
 
-        TopGradientArea(
-            navController = navController
+        // 页面内容
+        LazyColumn(
+            modifier = Modifier.fillMaxSize()
+        ) {
+
+            item {TopGradientArea(  navController = navController) }
+
+            item { ConcertInfoCard() }
+
+            item { SessionModule() }
+
+            item { EventInfoModule() }
+
+            item { NoticeModule() }
+
+            item { Spacer(modifier = Modifier.height(10.dp)) }
+
+            item { TicketStrategyModule() }
+
+
+            // 给底部按钮留位置
+            item {
+                Spacer(
+                    modifier = Modifier.height(100.dp)
+                )
+            }
+        }
+
+        // 固定底部
+        BottomBuyBar(
+            modifier = Modifier.align(Alignment.BottomCenter)
         )
-        Spacer(modifier = Modifier.height(16.dp))
-
-        ConcertInfoCard()
-
-        SessionModule()
-
-        EventInfoModule()
-
-        NoticeModule()
-
-        TicketStrategyModule()
-
     }
 }
-
 
 @Composable
 fun TopGradientArea(
@@ -614,6 +684,112 @@ fun WantWatchModule() {
     }
 }
 
+
+@Composable
+fun BottomBuyBar(
+    modifier: Modifier = Modifier
+) {
+
+    Surface(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(86.dp),
+
+        color = Color.White,
+
+        shadowElevation = 10.dp
+    ) {
+
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 18.dp),
+
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+
+            // 帮助
+            Column(
+                modifier = Modifier.width(52.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Image(
+                    painter = painterResource(R.drawable.ic_mall),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+
+                Text(
+                    "帮助",
+                    fontSize = 12.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.width(18.dp))
+
+            // 想看
+            Column(
+                modifier = Modifier.width(52.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+                Image(
+                    painter = painterResource(R.drawable.ic_message),
+                    contentDescription = null,
+                    modifier = Modifier.size(24.dp)
+                )
+
+                Text(
+                    "想看",
+                    fontSize = 12.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.width(18.dp))
+
+            // 购票按钮
+            Button(
+                onClick = {},
+
+                modifier = Modifier
+                    .weight(1f)
+                    .height(54.dp),
+
+                shape = RoundedCornerShape(30.dp),
+
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent
+                ),
+
+                contentPadding = PaddingValues(0.dp)
+            ) {
+
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(
+                            Brush.horizontalGradient(
+                                listOf(
+                                    Color(0xFFFFB321),
+                                    Color(0xFFFF6A2D)
+                                )
+                            )
+                        ),
+                    contentAlignment = Alignment.Center
+                ) {
+
+                    Text(
+                        "特惠购票",
+                        color = Color.White,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 20.sp
+                    )
+                }
+            }
+        }
+    }
+}
 
 
 @Preview(showBackground = true, showSystemUi = true)
