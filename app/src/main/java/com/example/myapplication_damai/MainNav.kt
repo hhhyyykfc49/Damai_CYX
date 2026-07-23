@@ -79,7 +79,8 @@ fun MainNav() {
     val hideBottomBarRoute=listOf(
         "search",
         "order",
-        "search_result/{keyword}"
+        "search_result/{keyword}",
+        "detail"
     )
 
     // 垂直布局：内容区 + 底部导航栏

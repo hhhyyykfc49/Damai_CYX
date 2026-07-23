@@ -69,6 +69,8 @@ import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.accompanist.pager.PagerState
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import androidx.navigation.compose.rememberNavController
+
 
 // 分类数据（不变）
 data class CategoryItem(
@@ -821,7 +823,6 @@ data class MustSeeItem(
     val desc: String
 )
 
-
 //单个演出卡片
 @Composable
 fun MustSeeItemCard(item: MustSeeItem,onclick:()-> Unit)
@@ -830,7 +831,8 @@ fun MustSeeItemCard(item: MustSeeItem,onclick:()-> Unit)
     Column(
         modifier = Modifier.width(100.dp)
             .clickable{
-                onclick
+                onclick()
+
             }
     ) {
       Image(
