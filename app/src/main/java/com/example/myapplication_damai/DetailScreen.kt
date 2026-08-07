@@ -124,6 +124,10 @@ fun DetailScreen(
 
             item { TicketStrategyModule() }
 
+            item { Spacer(modifier = Modifier.height(20.dp)) }
+
+            item { WantSee() }
+
 
             // 给底部按钮留位置
             item {
@@ -174,7 +178,7 @@ fun TopGradientArea(
             // 返回按钮
             Surface(
                 shape = RoundedCornerShape(16.dp),
-                color = Color(0xFF666666)
+                color = Color(0xFF292a3c)
             ) {
 
                 IconButton(
@@ -195,7 +199,7 @@ fun TopGradientArea(
 
                 Surface(
                     shape = RoundedCornerShape(16.dp),
-                    color = Color(0xFF666666)
+                    color = Color(0xFF292a3c)
                 ) {
 
                     IconButton(
@@ -203,9 +207,9 @@ fun TopGradientArea(
                     ) {
 
                         Icon(
-                            imageVector = Icons.Default.Share,
+                            painter = painterResource(R.drawable.shoppingcar),
                             contentDescription = null,
-                            tint = Color.White
+                            tint = Color.Unspecified
                         )
                     }
                 }
@@ -216,7 +220,7 @@ fun TopGradientArea(
 
                 Surface(
                     shape = RoundedCornerShape(16.dp),
-                    color = Color(0xFF666666)
+                    color = Color(0xFF292a3c)
                 ) {
 
                     IconButton(
@@ -224,9 +228,9 @@ fun TopGradientArea(
                     ) {
 
                         Icon(
-                            imageVector = Icons.Default.Share,
+                            painter=painterResource(R.drawable.share),
                             contentDescription = null,
-                            tint = Color.White
+                            tint = Color.Unspecified
                         )
                     }
                 }
@@ -309,6 +313,7 @@ fun ConcertInfoCard() {
                 )
 
             Row(
+                modifier = Modifier.fillMaxWidth()
             ) {
                 // 套票
                 Text(
@@ -329,7 +334,7 @@ fun ConcertInfoCard() {
                     text = "全部 >",
                     color=Color(0xFFa7abb4),
                     fontSize = 16.sp,
-                 modifier = Modifier.padding(start = 50.dp)
+                 modifier = Modifier.padding(start =  50.dp)
                 )
             }
             }
@@ -605,10 +610,16 @@ fun TicketStrategyModule() {
                 modifier = Modifier.weight(1f)
             ) {
 
-                Text(
-                    text = "抢票攻略",
-                    fontSize = 22.sp,
-                    fontWeight = FontWeight.Bold
+//                Text(
+//                    text = "抢票攻略",
+//                    fontSize = 22.sp,
+//                    fontWeight = FontWeight.Bold
+//                )
+
+                Image(
+                    painter = painterResource(R.drawable.tip),
+                    contentDescription = null,
+                    modifier = Modifier.height(20.dp)
                 )
 
                 Spacer(
@@ -625,19 +636,24 @@ fun TicketStrategyModule() {
 
             }
 
-            Button(
-                onClick = { },
-                shape = RoundedCornerShape(14.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color(0xFFFF6A3D)
-                )
-            ) {
-
-                Text(
-                    text = "去设置",
-                    color = Color.White
-                )
-            }
+//            Button(
+//                onClick = { },
+//                shape = RoundedCornerShape(14.dp),
+//                colors = ButtonDefaults.buttonColors(
+//                    containerColor = Color(0xFFFF6A3D)
+//                )
+//            ) {
+//
+//                Text(
+//                    text = "去设置",
+//                    color = Color.White
+//                )
+//            }
+            Image(
+                painter = painterResource(R.drawable.___9),
+                contentDescription = null,
+                modifier = Modifier.height(30.dp)
+            )
         }
     }
 }
@@ -715,7 +731,7 @@ fun BottomBuyBar(
             ) {
 
                 Image(
-                    painter = painterResource(R.drawable.ic_mall),
+                    painter = painterResource(R.drawable.help),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)
                 )
@@ -735,7 +751,7 @@ fun BottomBuyBar(
             ) {
 
                 Image(
-                    painter = painterResource(R.drawable.ic_message),
+                    painter = painterResource(R.drawable.collect),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp)
                 )
@@ -787,6 +803,68 @@ fun BottomBuyBar(
                     )
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun WantSee(){
+    val strategyBrush= Brush.linearGradient(
+        colors=listOf(
+            Color(0xFF4612A6),
+            Color.White
+        ),
+        start =Offset(x=0f,y=-3000f),
+        end =Offset(x=0f,y= Float.POSITIVE_INFINITY)
+    )
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+            .background(
+                brush = strategyBrush,
+                shape = RoundedCornerShape(16.dp)
+            )
+        ,
+        shape = RoundedCornerShape(16.dp),
+
+        colors= CardDefaults.cardColors(
+            containerColor = Color.Transparent
+        ),
+        elevation = CardDefaults.cardElevation(0.dp)
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(all = 6.dp)
+        ) {
+            Image(
+                painter = painterResource(R.drawable.wantsee),
+                contentDescription = null,
+                modifier = Modifier.height(20.dp)
+            )
+
+            Spacer(Modifier.height(15.dp))
+
+            Row(
+                modifier = Modifier
+                    .fillMaxWidth()
+            ) {
+                Image(
+                    painter = painterResource(R.drawable._22222),
+                    contentDescription = null,
+                    modifier = Modifier.height(30.dp)
+                )
+
+                Spacer(modifier = Modifier.width(147.dp))
+                Image(
+                    painter = painterResource(R.drawable.ic_wantsee),
+                    contentDescription = null,
+                    modifier = Modifier.height(30.dp)
+                )
+            }
+
+
         }
     }
 }

@@ -17,6 +17,10 @@ import com.example.myapplication_damai.ui.theme.MyApplication_DaMaiTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.*
+import androidx.compose.material3.MaterialTheme
 
 //class MainActivity : ComponentActivity() {
 //    override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,7 +40,25 @@ class MainActivity : ComponentActivity() {
         initPerformanceData()
 
         setContent {
-            MainNav()
+//            MainNav()
+            var showSplash by remember {
+                mutableStateOf(true)
+            }
+
+            if (showSplash) {
+
+                SplashScreen(
+                    onFinished = {
+                        showSplash = false
+                    }
+                )
+
+            } else {
+
+                MainNav()
+
+            }
+
         }
     }
 
