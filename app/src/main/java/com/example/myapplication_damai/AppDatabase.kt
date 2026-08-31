@@ -17,9 +17,11 @@ import androidx.room.RoomDatabase
 @Database(
     entities = [
         SearchHistoryEntity::class,
-        PerformanceEntity::class
+        PerformanceEntity::class,
+        MyOrderPerformanceEntity::class,
+
     ],
-    version = 2,
+    version = 4,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -27,4 +29,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun searchHistoryDao(): SearchHistoryDao
 
     abstract fun performanceDao(): PerformanceDao
+
+    abstract fun myOrderPerformanceDao():MyOrderPerformanceDao
 }

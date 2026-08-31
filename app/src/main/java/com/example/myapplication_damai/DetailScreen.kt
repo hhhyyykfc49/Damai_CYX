@@ -53,10 +53,18 @@ import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.material3.*
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import com.example.myapplication_damai.data.local.DatabaseProvider
+import com.example.myapplication_damai.data.local.MyOrderPerformanceEntity
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 
 //@Composable
@@ -706,6 +714,14 @@ fun BottomBuyBar(
     modifier: Modifier = Modifier
 ) {
 
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
+    val dao = remember {
+        DatabaseProvider
+            .getDatabase(context)
+            .myOrderPerformanceDao()
+    }
+
     Surface(
         modifier = modifier
             .fillMaxWidth()
@@ -791,7 +807,32 @@ fun BottomBuyBar(
                                     Color(0xFFFF6A2D)
                                 )
                             )
-                        ),
+                        )
+                        .pointerInput(Unit){
+                            detectTapGestures(
+                                onTap = {
+                                    scope.launch(Dispatchers.IO) {
+
+                                        val exist = dao.findByIdCode(1001)
+
+                                        if(exist ==null){
+                                            dao.insert(
+                                                MyOrderPerformanceEntity(
+                                                    title = "\"福州·2026苏见信「尽兴而活」巡回演唱会-福州站\"",
+                                                    city = "福建福州",
+                                                    price = "¥280-1600",
+                                                    time = "2026.07.25周六 19:30",
+                                                    route = "detail",
+                                                    image = R.drawable.ic_wantsee ,
+                                                    idCode = 1001
+                                                )
+                                            )
+                                        }
+                                    }
+                                }
+                            )
+                        }
+                    ,
                     contentAlignment = Alignment.Center
                 ) {
 

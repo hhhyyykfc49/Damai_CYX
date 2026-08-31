@@ -4,6 +4,8 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -17,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -26,6 +29,11 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.myapplication_damai.MineScreen
 import com.example.myapplication_damai.R
+import com.example.myapplication_damai.data.local.DatabaseProvider
+import com.example.myapplication_damai.data.local.MyOrderPerformanceDao
+import com.example.myapplication_damai.data.local.MyOrderPerformanceEntity
+import com.example.myapplication_damai.data.local.PerformanceEntity
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 //一级顶部标签
@@ -39,8 +47,21 @@ fun OrderScreen(navController: NavController) {
     val pageState = rememberPagerState(pageCount = { topTabList.size })
     var selectSubIndex by remember { mutableIntStateOf(0) }
 
+    /**
+     测试私货
+     */
+    val context = LocalContext.current
+    val dao = remember {
+        DatabaseProvider
+            .getDatabase(context)
+            .myOrderPerformanceDao()
+    }
+    val scope = rememberCoroutineScope()
+
     Scaffold(topBar = {
-        TopAppBar(title = { Text("我的订单", fontSize = 20.sp) },
+        TopAppBar(title = { Text("我的订单", fontSize = 20.sp,modifier = Modifier.clickable(onClick = {
+            scope.launch(Dispatchers.IO) {dao.clearAll()}
+        })) },
             navigationIcon = {
                 IconButton (onClick = {navController.popBackStack()}){
                     Icon(painterResource(R.drawable.left_arrow),
@@ -130,27 +151,56 @@ fun OrderScreen(navController: NavController) {
 //空订单页面（中间插画+文字）
 @Composable
 fun EmptyOrderView() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState()),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        // 后续替换为空状态插画
-        Box(
-            modifier = Modifier
-                .size(220.dp)
-                .background(Color(0xFFE9EDF3), RoundedCornerShape(12.dp))
-        )
-        Spacer(modifier = Modifier.height(16.dp))
-        Text(
-            text = "您暂时没有订单呦~",
-            fontSize = 20.sp,
-            color = Color(0xFF333333),
-            textAlign = TextAlign.Center
-        )
+
+    val context = LocalContext.current
+    val dao = remember {
+        DatabaseProvider
+            .getDatabase(context)
+            .myOrderPerformanceDao()
     }
+
+    val myOrderPerformanceDaoList by dao
+        .getAllHistory()
+        .collectAsState(initial = emptyList())
+
+    LazyColumn(
+        modifier = Modifier.fillMaxSize()
+    ) {
+
+        items(myOrderPerformanceDaoList) { item ->
+
+            ListItem(
+                headlineContent = {
+                    Text(item.title)
+                },
+                supportingContent = {
+                    Text("${item.city}  ${item.price}")
+                }
+            )
+        }
+    }
+
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .verticalScroll(rememberScrollState()),
+//        verticalArrangement = Arrangement.Center,
+//        horizontalAlignment = Alignment.CenterHorizontally
+//    ) {
+//        // 后续替换为空状态插画
+//        Box(
+//            modifier = Modifier
+//                .size(220.dp)
+//                .background(Color(0xFFE9EDF3), RoundedCornerShape(12.dp))
+//        )
+//        Spacer(modifier = Modifier.height(16.dp))
+//        Text(
+//            text = "您暂时没有订单呦~",
+//            fontSize = 20.sp,
+//            color = Color(0xFF333333),
+//            textAlign = TextAlign.Center
+//        )
+//    }
 }
 
 

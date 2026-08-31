@@ -15,3 +15,24 @@ data class PerformanceEntity(
 
     val price: String
 )
+
+@Entity(tableName = "myOrderPerformance")
+data class MyOrderPerformanceEntity(
+
+    @PrimaryKey(autoGenerate = true)
+    val id: Int = 0,
+
+    val title: String,
+
+    val city: String,
+
+    val price: String,
+
+    val time:String,
+
+    val route:String,
+
+    val image:Int,
+
+    val idCode:Int,
+)

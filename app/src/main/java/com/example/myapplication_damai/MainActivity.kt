@@ -81,19 +81,19 @@ class MainActivity : ComponentActivity() {
 
             dao.insert(
                 PerformanceEntity(
-                    title = "五月天好好好想见到你演唱会",
-                    city = "厦门",
+                    title = "Jay五月天好好好想见到你演唱会",
+                    city = "xiamen",
                     price = "¥380"
                 )
             )
 
-            dao.insert(
-                PerformanceEntity(
-                    title = "邓紫棋GLORIA巡演",
-                    city = "南昌",
-                    price = "¥480"
-                )
-            )
+//            dao.insert(
+//                PerformanceEntity(
+//                    title = "邓紫棋GLORIA巡演（deng)",
+//                    city = "南昌",
+//                    price = "¥480"
+//                )
+//            )
         }
     }
 }

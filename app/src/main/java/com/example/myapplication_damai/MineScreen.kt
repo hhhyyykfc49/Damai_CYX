@@ -360,8 +360,8 @@ fun FuncTwoRow() {
         FuncInfo("周边商城", R.drawable.ic_mall),
         FuncInfo("观演团", R.drawable.ic_team_visitor),
         FuncInfo("用户反馈", R.drawable.ic_feedback),
-        FuncInfo("帮助中心", R.drawable.ic_setting),
-        FuncInfo("设置", R.drawable.ic_message)
+    FuncInfo("帮助中心", R.drawable.help),
+        FuncInfo("设置", R.drawable.ic_setting)
     )
     // 列表状态，监听滚动
     val lazyState = rememberLazyListState()
